@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="icon" href="http://example.com/favicon.png">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
+    <base target="_top">
+    <?!= include('CSS'); ?>
+  </head>
+  
+  <body>
+    <img class="logo" style="width: calc(100% - 200px); max-width: 500px" src="https://phxstartupweek.com/wp-content/uploads/2020/01/Homie-Logo-RBG-01-1.png" alt="Homie logo"/>
+    
+    <div class="main" onClick=""> <!-- Start of main -->
+      
+      <div class="mainTop">
+        <div class="scoreDiv">
+          Score: <span id="score">7</span>
+        </div>
+        <div class="shotclockDiv">
+          <span id="shotclock">24</span>
+        </div>
+        <div class="leaderboardDiv">
+          <div class="title">Leaderboard</div>
+          <div id="leaderboard">
+            <div>1. Ben Ellis 9</div>
+            <div>1. Allison Timothy 9</div>
+            <div>3. Wyatt Koeven 8</div>
+            <div>4. Juan Gomez 7</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mainBottom">
+        <div class="questionNum">
+          <span id="questionActive">9</span>
+          /
+          <span id="questionTotal">10</span>
+        </div>
+        <div id="question">
+          This is a question about the Utah REPC. Which is the best answer?
+        </div>
+        <div id="option1">
+          a) This option is possible.
+        </div>
+        <div id="option2">
+          b) This is your best option.
+        </div>
+        <div id="option3">
+          c) Choose this option if you want to.
+        </div>
+        <div id="option4">
+          d) I wouldn't choose this option if I were you.
+        </div>
+      </div>
+
+    </div> <!-- End of main -->
+    
+    <div id="correct">Correct</div>
+    <div id="incorrect">Incorrect</div>
+    
+    <?!= include('JavaScript'); ?>
+  </body>
+  
+</html>
