@@ -9,7 +9,7 @@ body {
   background-color: white;
   background-size: auto;
   background-position: center;
-  color: #3e494c;
+  color: #596163;
   font-size: 25px;
   display: flex;
   flex-direction: column;
@@ -33,30 +33,82 @@ body {
 }
 
 .mainTop {
-  width: 100%;
+  height: 150px;
+  width: calc(100% - 40px);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: 20px 0;
 }
 
 .topThird {
-  width: calc((100% - 80px) / 3);
+  width: 100%;
   display: flex;
   justify-content: center;
 }
 
 .scoreDiv {
-  margin-left: 20px;
-}
-
-.leaderboardDiv {
+  height: 100%;
   background: white;
   border-radius: 5px;
-  margin: 20px 20px 20px 0;
   padding: 5px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
+}
+
+.scores {
+  height: 100%;
+  width: calc(100% - 20px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.scoreHalf {
+  width: calc(50% - 1px);
+  display: flex; 
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 30px;
+}
+
+.myScore {
+  color: #00dec0;
+}
+
+.scoreHalfTitle {
+  margin-bottom: 5px;
+}
+
+#score {
+
+}
+
+.scoreLine {
+  height: 70px;
+  width: 2px;
+  background: #3e494c;
+}
+
+#shotclock {
+  color: white;
+  font-size: 80px;
+  font-weight: 900;
+}
+
+.leaderboardDiv {
+  height: 100%;
+  background: white;
+  border-radius: 5px;
+  padding: 5px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   font-size: 18px;
 }
 
@@ -86,7 +138,7 @@ body {
 
 .leaderName {
   width: calc(100% - 60px);
-  padding-left: 10px;
+  padding-left: 5px;
 }
 
 .mainBottom {
@@ -117,10 +169,12 @@ body {
 #question {
   width: calc(100% - 65px);
   margin-bottom: 5px;
+  font-weight: 600;
 }
 
 .option {
   margin: 5px 10px;
+  font-weight: 500;
 }
 
 </style>
