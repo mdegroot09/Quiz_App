@@ -70,6 +70,7 @@ body {
 
 #leaderboard {
   width: 100%;
+  overflow: auto;
 }
 
 .leader {
@@ -94,8 +95,7 @@ body {
   margin: 0 0 20px 0;
   border-radius: 5px;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  justify-content: flex-start;
   position: relative;
 }
 
@@ -103,10 +103,24 @@ body {
   position: absolute;
   right: 5px;
   top: 5px;
+  font-size: 18px;
+}
+
+.questionDiv {
+  width: calc(100% - 10px);
+  margin: 10px 0 10px 10px;
+  display: flex; 
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 #question {
-  margin-right: 50px;
+  width: calc(100% - 65px);
+  margin-bottom: 5px;
+}
+
+.option {
+  margin: 5px 10px;
 }
 
 </style>
