@@ -69,16 +69,16 @@
           <div id="question">
             This is a question about the Utah REPC. Which is the best answer?
           </div>
-          <div class="option" id="option1">
+          <div class="option" id="option1" onClick="registerChoice(this.id, 'option2')">
             a) This option is possible.
           </div>
-          <div class="option" id="option2">
+          <div class="option" id="option2" onClick="registerChoice(this.id, 'option2')">
             b) This is your best option.
           </div>
-          <div class="option" id="option3">
+          <div class="option" id="option3" onClick="registerChoice(this.id, 'option2')">
             c) Choose this option if you want to.
           </div>
-          <div class="option" id="option4">
+          <div class="option" id="option4" onClick="registerChoice(this.id, 'option2')">
             d) I wouldn't choose this option if I were you.
           </div>
         </div>
@@ -86,8 +86,7 @@
 
     </div> <!-- End of main -->
     
-    <div id="correct">Correct</div>
-    <div id="incorrect">Incorrect</div>
+    <div id="result">Correct</div>
     
     <?!= include('JavaScript'); ?>
   </body>

@@ -6,4 +6,40 @@ function load(){
   
 }
 
+function registerChoice(id, idCorrect){
+  var eChosen = document.getElementById(id)
+  var eCorrect = document.getElementById(idCorrect)
+  var result = document.getElementById('result')
+  
+  // show correct styling
+  if (id == idCorrect){
+    eChosen.style.color = '#00dec0'
+    result.style.color = '#00dec0'
+    result.innerText = 'Correct'
+  }
+  
+  // show incorrect styling
+  else {
+    eChosen.style.color = '#fdb2b2'
+    eCorrect.style.color = '#00dec0'
+    result.style.color = '#fdb2b2'
+    result.innerText = 'Incorrect'
+  }
+  
+  makeGray(id, idCorrect)
+}
+
+function makeGray(id, idCorrect){
+  var options = ['option1', 'option2', 'option3', 'option4']
+
+  // make other options gray and disable all onclicks
+  options.forEach(function(a){
+    var e = document.getElementById(a)
+    if (id != a && idCorrect != a){
+      e.style.color = '#dfdfdf'
+    }
+    e.onclick = ''
+  })
+}
+
 </script>
