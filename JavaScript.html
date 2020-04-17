@@ -1,9 +1,48 @@
 <script>
 
-window.addEventListener('load', load())
+window.addEventListener('load', runGetQuizzes())
 
-function load(){
+function runGetQuizzes(){
+  // Get data from spreadsheet 
+  google.script.run
+  // if successful, display the data 
+  .withSuccessHandler(function(res){
+    console.log(res)
+    document.quiz = res
+    document.active = 0
+    showQuestion(res[0])
+  })
+  // if error
+  .withFailureHandler(function(err){
+    console.log("error occured", err);
+  })
+  .getQuizzes()
+}
+
+function showQuestion(questionObj){
+  var question = document.getElementById('question')
+  var optionA = document.getElementById('optionA')
+  var optionB = document.getElementById('optionB')
+  var optionC = document.getElementById('optionC')
+  var optionD = document.getElementById('optionD')
   
+  // get correct option element
+  var idCorrect = 'option' + questionObj.idCorrect
+  var correct = document.getElementById(idCorrect)
+  
+  // update text for question and options 
+  question.innerText = questionObj.question
+  optionA.innerText = 'a) ' + questionObj.optionA
+  optionB.innerText = 'b) ' + questionObj.optionB
+  optionC.innerText = 'c) ' + questionObj.optionC
+  optionD.innerText = 'd) ' + questionObj.optionD
+  
+  // update option onclicks
+  optionA.onclick = function(){registerChoice('optionA', idCorrect)}
+  optionB.onclick = function(){registerChoice('optionB', idCorrect)}
+  optionC.onclick = function(){registerChoice('optionC', idCorrect)}
+  optionD.onclick = function(){registerChoice('optionD', idCorrect)}
+  correct.onclick = function(){registerChoice(idCorrect, idCorrect)}
 }
 
 function registerChoice(id, idCorrect){
@@ -30,7 +69,7 @@ function registerChoice(id, idCorrect){
 }
 
 function makeGray(id, idCorrect){
-  var options = ['option1', 'option2', 'option3', 'option4']
+  var options = ['optionA', 'optionB', 'optionC', 'optionD']
 
   // make other options gray and disable all onclicks
   options.forEach(function(a){
