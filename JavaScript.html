@@ -10,7 +10,7 @@ function runGetQuizzes(){
     console.log(res)
     document.quiz = res
     document.active = 0
-    showQuestion(res[0])
+    showQuestion(res, 0)
   })
   // if error
   .withFailureHandler(function(err){
@@ -19,7 +19,8 @@ function runGetQuizzes(){
   .getQuizzes()
 }
 
-function showQuestion(questionObj){
+function showQuestion(quiz, i){
+  var questionObj = quiz[i]
   var question = document.getElementById('question')
   var optionA = document.getElementById('optionA')
   var optionB = document.getElementById('optionB')
