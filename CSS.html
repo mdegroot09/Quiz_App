@@ -22,15 +22,18 @@ body {
 .arrows {
   height: 100%;
   width: 100%;
-  z-index: 1;
   display: flex; 
   justify-content: space-between;
   align-items: center;
   position: absolute;
+  z-index: -1;
 }
 
 .arrow {
   height: 100px;
+  cursor: pointer;
+  z-index: 1;
+  opacity: .75;
 }
 
 .main {
