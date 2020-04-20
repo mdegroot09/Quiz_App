@@ -26,7 +26,7 @@ body {
   justify-content: space-between;
   align-items: center;
   position: absolute;
-  z-index: -1;
+  margin-top: 80px;
 }
 
 .arrow {
@@ -34,6 +34,14 @@ body {
   cursor: pointer;
   z-index: 1;
   opacity: .75;
+}
+
+.arrow:hover {
+  opacity: .9;
+}
+
+#backArrow {
+  transform: rotate(180deg);
 }
 
 .main {
