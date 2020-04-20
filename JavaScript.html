@@ -20,7 +20,21 @@ function runGetQuizzes(){
 }
 
 function showQuestion(quiz, i){
+
+  // update active num
+  document.active = i
+  
+  // quit function if active num is outside range
+  if (i < 0 || (!i && i != 0)){
+    return (document.active = 0)
+  }
+  else if (i >= quiz.length){
+    return (document.active = (quiz.length - 1))
+  }
+
   var questionObj = quiz[i]
+  console.log('showQuestion() questionObj:')
+  console.log(questionObj)
   var question = document.getElementById('question')
   var optionA = document.getElementById('optionA')
   var optionB = document.getElementById('optionB')
@@ -28,8 +42,7 @@ function showQuestion(quiz, i){
   var optionD = document.getElementById('optionD')
   
   // get correct option element
-  var idCorrect = 'option' + questionObj.idCorrect
-  var correct = document.getElementById(idCorrect)
+  var idCorrect = questionObj.idCorrect
   
   // update text for question and options 
   question.innerText = questionObj.question
@@ -38,12 +51,38 @@ function showQuestion(quiz, i){
   optionC.innerText = 'c) ' + questionObj.optionC
   optionD.innerText = 'd) ' + questionObj.optionD
   
-  // update option onclicks
-  optionA.onclick = function(){registerChoice('optionA', idCorrect)}
-  optionB.onclick = function(){registerChoice('optionB', idCorrect)}
-  optionC.onclick = function(){registerChoice('optionC', idCorrect)}
-  optionD.onclick = function(){registerChoice('optionD', idCorrect)}
-  correct.onclick = function(){registerChoice(idCorrect, idCorrect)}
+  resetQuestionStyling(quiz[i])
+}
+
+function resetQuestionStyling(question){
+  var optionA = document.getElementById('optionA')
+  var optionB = document.getElementById('optionB')
+  var optionC = document.getElementById('optionC')
+  var optionD = document.getElementById('optionD')
+  var idCorrect = question.idCorrect
+  var correct = document.getElementById(idCorrect)
+  
+  // add click functions if no choice has been made
+  if (!question.choice){
+    // update option onclicks
+    optionA.onclick = function(){registerChoice('optionA', idCorrect)}
+    optionB.onclick = function(){registerChoice('optionB', idCorrect)}
+    optionC.onclick = function(){registerChoice('optionC', idCorrect)}
+    optionD.onclick = function(){registerChoice('optionD', idCorrect)}
+    
+    // update option styling
+    optionA.style.color = '#596163'
+    optionB.style.color = '#596163'
+    optionC.style.color = '#596163'
+    optionD.style.color = '#596163'
+    
+    return 
+  }
+  
+  // if choice has been made, 
+  else {
+    return registerChoice(question.choice, idCorrect)
+  }
 }
 
 function registerChoice(id, idCorrect){
@@ -53,18 +92,23 @@ function registerChoice(id, idCorrect){
   
   // show correct styling
   if (id == idCorrect){
-    eChosen.style.color = '#00dec0'
-    result.style.color = '#00dec0'
+    eChosen.style.color = '#00dec0' // teal
+    result.style.color = '#00dec0' 
     result.innerText = 'Correct'
   }
   
   // show incorrect styling
   else {
-    eChosen.style.color = '#fdb2b2'
-    eCorrect.style.color = '#00dec0'
+    eChosen.style.color = '#fdb2b2' // red
+    eCorrect.style.color = '#00dec0' // teal
     result.style.color = '#fdb2b2'
     result.innerText = 'Incorrect'
   }
+  
+  var i = document.active
+  document.quiz[i].choice = id
+  console.log('quiz question updated:')
+  console.log(document.quiz[i])
   
   makeGray(id, idCorrect)
   showArrows()

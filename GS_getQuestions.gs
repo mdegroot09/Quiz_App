@@ -16,7 +16,7 @@ function getQuizzes(){
       optionB: a[2],
       optionC: a[3],
       optionD: a[4],
-      idCorrect: a[5]
+      idCorrect: ('option' + a[5])
     }
   })
   
