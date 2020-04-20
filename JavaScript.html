@@ -31,6 +31,10 @@ function showQuestion(quiz, i){
   else if (i >= quiz.length){
     return (document.active = (quiz.length - 1))
   }
+  
+  // update question num on UI
+  document.getElementById('questionActive').innerText = i + 1
+  document.getElementById('questionTotal').innerText = quiz.length
 
   var questionObj = quiz[i]
   console.log('showQuestion() questionObj:')
