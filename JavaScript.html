@@ -77,7 +77,10 @@ function resetQuestionStyling(question){
     optionC.style.color = '#596163'
     optionD.style.color = '#596163'
     
-    return hideArrows()
+    hideArrows()
+    document.getElementById('shotclock').innerText = 24
+    document.getElementById('result').innerText = ''
+    return startShotclock()
   }
 }
 
@@ -85,6 +88,8 @@ function registerChoice(id, idCorrect){
   var eChosen = document.getElementById(id)
   var eCorrect = document.getElementById(idCorrect)
   var result = document.getElementById('result')
+  
+  stopShotclock()
   
   // show correct styling
   if (id == idCorrect){
@@ -98,7 +103,13 @@ function registerChoice(id, idCorrect){
     eChosen.style.color = '#fdb2b2' // red
     eCorrect.style.color = '#00dec0' // teal
     result.style.color = '#fdb2b2'
-    result.innerText = 'Incorrect'
+    
+    if (id == 'noAnswer'){
+      result.innerText = 'Time\'s Up!'
+    }
+    else {
+      result.innerText = 'Incorrect'
+    }
   }
   
   var i = document.active
@@ -164,7 +175,31 @@ function showArrows(quiz, i){
 }
 
 function startShotclock(){
+  document.shotclock = (
+    setInterval(function(){
+      var shotclock = document.getElementById('shotclock').innerText * 1
+      shotclock -= 1
+      
+      if (shotclock < 0){
+        return outOfTime()
+      }
+      
+      document.getElementById('shotclock').innerText = shotclock
+    }, 1000)
+  )
+}
+
+function stopShotclock(){
+  clearInterval(document.shotclock)
+}
+
+function outOfTime(){
+  document.getElementById('shotclock').innerText = 0
+  stopShotclock()
   
+  var quiz = document.quiz
+  var i = document.active
+  registerChoice('noAnswer', quiz[i].idCorrect)
 }
 
 </script>
