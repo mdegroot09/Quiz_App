@@ -105,7 +105,7 @@ function registerChoice(id, idCorrect){
   var quiz = document.quiz
   quiz[i].choice = id
   console.log('quiz question updated:')
-  console.log(document.quiz[i])
+  console.log(quiz[i])
   
   makeGray(id, idCorrect)
   showArrows(quiz, i)
@@ -161,6 +161,10 @@ function showArrows(quiz, i){
     document.getElementById('backArrow').style.display = 'block'
     document.getElementById('fwdArrow').style.display = 'block'
   }
+}
+
+function startShotclock(){
+  
 }
 
 </script>
