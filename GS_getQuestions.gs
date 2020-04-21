@@ -20,5 +20,54 @@ function getQuizzes(){
     }
   })
   
+  quiz = getUserResults(quiz)
+  
   return quiz
+}
+
+function getUserResults(quiz){
+  var url = 'https://docs.google.com/spreadsheets/d/1IBJcmY6GoveD9xy4DTazgoMI24AxaTXIzwTL4DWkAfM/edit?usp=sharing'
+  var ss = SpreadsheetApp.openByUrl(url)
+  
+  // get user results data
+  var userResults = ss.getSheetByName('User Results').getRange('A2:M').getValues()
+  userResults = userResults.filter(function(a){
+    return a[1] == Session.getActiveUser().getEmail()
+  })
+  
+  // if user email not found, add user
+  if (!userResults[0]){
+    addUser()
+    return quiz
+  }
+  
+  // if user email IS found, get user's data
+  else {
+    return quiz
+  }
+}
+
+function addUser(){
+  var url = 'https://docs.google.com/spreadsheets/d/1IBJcmY6GoveD9xy4DTazgoMI24AxaTXIzwTL4DWkAfM/edit?usp=sharing'
+  var ss = SpreadsheetApp.openByUrl(url).getSheetByName('User Results')
+  
+  // add new row
+  ss.insertRowBefore(ss.getRange('A2').getRow())
+  
+  // get user email and paste on new row
+  var email = Session.getActiveUser().getEmail()
+  ss.getRange('B2').setValue(email)
+  
+  // get user name from email
+  var fullName = email.split('@')[0]
+  
+  var lastName = fullName.split('.')[1].split('')
+  lastName[0] = lastName[0].toUpperCase()
+  lastName = lastName.join('')
+  
+  var firstName = fullName.split('.')[0].split('')
+  firstName[0] = firstName[0].toUpperCase()
+  firstName = firstName.join('')
+  
+  ss.getRange('A2').setValue(firstName + ' ' + lastName)
 }
