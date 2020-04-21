@@ -12,8 +12,9 @@
     
     <!-- side arrows -->
     <div class="arrows">
-      <img class="arrow" id="backArrow" onClick="showQuestion(document.quiz, (document.active * 1) - 1)" src="https://image.flaticon.com/icons/png/512/16/16049.png" alt="arrow icon">
-      <img class="arrow" id="fwdArrow" onClick="showQuestion(document.quiz, (document.active * 1) + 1)" src="https://image.flaticon.com/icons/png/512/16/16049.png" alt="arrow icon">
+      <img class="arrow" id="backArrow" style="display: none" onClick="showQuestion(document.quiz, (document.active * 1) - 1)" src="https://image.flaticon.com/icons/png/512/16/16049.png" alt="arrow icon">
+      <div></div> <!-- needed for space-between functionality -->
+      <img class="arrow" id="fwdArrow" style="display: none" onClick="showQuestion(document.quiz, (document.active * 1) + 1)" src="https://image.flaticon.com/icons/png/512/16/16049.png" alt="arrow icon">
     </div>
     
     <div class="main" onClick=""> <!-- Start of main -->

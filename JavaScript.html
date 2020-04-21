@@ -24,14 +24,6 @@ function showQuestion(quiz, i){
   // update active num
   document.active = i
   
-  // quit function if active num is outside range
-  if (i < 0 || (!i && i != 0)){
-    return (document.active = 0)
-  }
-  else if (i >= quiz.length){
-    return (document.active = (quiz.length - 1))
-  }
-  
   // update question num on UI
   document.getElementById('questionActive').innerText = i + 1
   document.getElementById('questionTotal').innerText = quiz.length
@@ -66,8 +58,13 @@ function resetQuestionStyling(question){
   var idCorrect = question.idCorrect
   var correct = document.getElementById(idCorrect)
   
-  // add click functions if no choice has been made
-  if (!question.choice){
+  // if choice was previously made, register choice
+  if (question.choice) {
+    return registerChoice(question.choice, idCorrect)
+  }
+  
+  // add click functions, styling if no choice has been made
+  else {
     // update option onclicks
     optionA.onclick = function(){registerChoice('optionA', idCorrect)}
     optionB.onclick = function(){registerChoice('optionB', idCorrect)}
@@ -80,12 +77,7 @@ function resetQuestionStyling(question){
     optionC.style.color = '#596163'
     optionD.style.color = '#596163'
     
-    return 
-  }
-  
-  // if choice has been made, 
-  else {
-    return registerChoice(question.choice, idCorrect)
+    return hideArrows()
   }
 }
 
@@ -110,12 +102,13 @@ function registerChoice(id, idCorrect){
   }
   
   var i = document.active
-  document.quiz[i].choice = id
+  var quiz = document.quiz
+  quiz[i].choice = id
   console.log('quiz question updated:')
   console.log(document.quiz[i])
   
   makeGray(id, idCorrect)
-  showArrows()
+  showArrows(quiz, i)
 }
 
 function makeGray(id, idCorrect){
@@ -131,8 +124,43 @@ function makeGray(id, idCorrect){
   })
 }
 
-function showArrows(){
-  
+function hideArrows(){
+  document.getElementById('backArrow').style.display = 'none'
+  document.getElementById('fwdArrow').style.display = 'none'
+}
+
+function showArrows(quiz, i){
+  // quit function if active num is outside range
+  if (i < 0 || (!i && i != 0)){
+    return (document.active = 0)
+  }
+  else if (i >= quiz.length){
+    return (document.active = (quiz.length - 1))
+  }
+  else if (i == (quiz.length - 1)){
+    document.getElementById('fwdArrow').style.display = 'none'
+    
+    if (quiz.length > 1){
+      document.getElementById('backArrow').style.display = 'block'
+    }
+    else {
+      document.getElementById('backArrow').style.display = 'none'
+    }
+  }
+  else if (i == 0){
+    document.getElementById('backArrow').style.display = 'none'
+    
+    if (quiz.length > 1){
+      document.getElementById('fwdArrow').style.display = 'block'
+    }
+    else {
+      document.getElementById('fwdArrow').style.display = 'none'
+    }
+  }
+  else {
+    document.getElementById('backArrow').style.display = 'block'
+    document.getElementById('fwdArrow').style.display = 'block'
+  }
 }
 
 </script>
