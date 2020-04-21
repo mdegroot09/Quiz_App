@@ -43,6 +43,7 @@ function getUserResults(quiz){
   
   // if user email IS found, get user's data
   else {
+    quiz = addResultsToObj(quiz, userResults[0])
     return quiz
   }
 }
@@ -70,4 +71,15 @@ function addUser(){
   firstName = firstName.join('')
   
   ss.getRange('A2').setValue(firstName + ' ' + lastName)
+}
+
+function addResultsToObj(quiz, userResults){
+  quiz.forEach(function(q, i){
+    var choice = userResults[i + 3]
+    if (choice){
+      quiz[i].choice = 'option' + userResults[i + 3]
+    }
+  })
+  
+  return quiz
 }
