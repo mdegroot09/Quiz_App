@@ -118,6 +118,7 @@ function registerChoice(id, idCorrect){
   console.log('quiz question updated:')
   console.log(quiz[i])
   
+  runAddChoice(id, i)
   makeGray(id, idCorrect)
   showArrows(quiz, i)
 }
@@ -200,6 +201,25 @@ function outOfTime(){
   var quiz = document.quiz
   var i = document.active
   registerChoice('noAnswer', quiz[i].idCorrect)
+}
+
+function runAddChoice(choice, active){
+  var data = {
+    choice: choice,
+    active: active
+  }
+  
+  // Get data from spreadsheet 
+  google.script.run
+  // if successful, display the data 
+  .withSuccessHandler(function(res){
+    console.log('Spreadsheet updated')
+  })
+  // if error
+  .withFailureHandler(function(err){
+    console.log("error occured", err);
+  })
+  .addChoice(data)
 }
 
 </script>

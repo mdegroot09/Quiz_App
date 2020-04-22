@@ -1,9 +1,9 @@
 function getQuizzes(){
   var url = 'https://docs.google.com/spreadsheets/d/1IBJcmY6GoveD9xy4DTazgoMI24AxaTXIzwTL4DWkAfM/edit?usp=sharing'
-  var ss = SpreadsheetApp.openByUrl(url)
+  var ss = SpreadsheetApp.openByUrl(url).getSheetByName('Questions')
   
   // get quiz questions, filter out blank lines
-  var quizArr = ss.getSheetByName('Questions').getRange('A2:F10').getValues()
+  var quizArr = ss.getRange('A2:F10').getValues()
   quizArr = quizArr.filter(function(a){
     return a[0]
   })
@@ -27,10 +27,10 @@ function getQuizzes(){
 
 function getUserResults(quiz){
   var url = 'https://docs.google.com/spreadsheets/d/1IBJcmY6GoveD9xy4DTazgoMI24AxaTXIzwTL4DWkAfM/edit?usp=sharing'
-  var ss = SpreadsheetApp.openByUrl(url)
+  var ss = SpreadsheetApp.openByUrl(url).getSheetByName('User Results')
   
   // get user results data
-  var userResults = ss.getSheetByName('User Results').getRange('A2:M').getValues()
+  var userResults = ss.getRange('A2:M').getValues()
   userResults = userResults.filter(function(a){
     return a[1] == Session.getActiveUser().getEmail()
   })
@@ -57,8 +57,38 @@ function addUser(){
   
   // get user email and paste on new row
   var email = Session.getActiveUser().getEmail()
-  ss.getRange('B2').setValue(email)
+  var name = getName(email)
+  var formula = getFormula()
   
+  // paste values
+  ss.getRange('A2').setValue(name)
+  ss.getRange('B2').setValue(email)
+  ss.getRange('C2').setValue(formula)
+}
+
+function getFormula(){
+  var str = (
+    '=IF(' + '\n' +
+      'OR(D2 <> "", E2 <> "", F2 <> "", G2 <> "", H2 <> "", I2 <> "", J2 <> "", K2 <> "", L2 <> "", M2 <> ""),' + '\n' +
+      'SUM(' + '\n' +
+        'IF(AND(D2 <> "", D2 = INDIRECT("Questions!F2")), 1, 0),' + '\n' +
+        'IF(AND(E2 <> "", E2 = INDIRECT("Questions!F3")), 1, 0),' + '\n' +
+        'IF(AND(F2 <> "", F2 = INDIRECT("Questions!F4")), 1, 0),' + '\n' +
+        'IF(AND(G2 <> "", G2 = INDIRECT("Questions!F5")), 1, 0),' + '\n' +
+        'IF(AND(H2 <> "", H2 = INDIRECT("Questions!F6")), 1, 0),' + '\n' +
+        'IF(AND(I2 <> "", I2 = INDIRECT("Questions!F7")), 1, 0),' + '\n' +
+        'IF(AND(J2 <> "", J2 = INDIRECT("Questions!F8")), 1, 0),' + '\n' +
+        'IF(AND(K2 <> "", K2 = INDIRECT("Questions!F9")), 1, 0),' + '\n' +
+        'IF(AND(L2 <> "", L2 = INDIRECT("Questions!F10")), 1, 0),' + '\n' +
+        'IF(AND(M2 <> "", M2 = INDIRECT("Questions!F11")), 1, 0)' + '\n' +
+      ')' + '\n' +
+    ',"")'
+  )
+  
+  return str
+}
+
+function getName(email){
   // get user name from email
   var fullName = email.split('@')[0]
   
@@ -70,7 +100,7 @@ function addUser(){
   firstName[0] = firstName[0].toUpperCase()
   firstName = firstName.join('')
   
-  ss.getRange('A2').setValue(firstName + ' ' + lastName)
+  return (firstName + ' ' + lastName)
 }
 
 function addResultsToObj(quiz, userResults){
