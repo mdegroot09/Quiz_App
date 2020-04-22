@@ -88,24 +88,33 @@ function registerChoice(id, idCorrect){
   var eChosen = document.getElementById(id)
   var eCorrect = document.getElementById(idCorrect)
   var result = document.getElementById('result')
+  var shotclock = document.getElementById('shotclock')
+  var checkmark = document.getElementById('checkmark')
+  var xImg = document.getElementById('xImg')
   
   stopShotclock()
   
   // show correct styling
   if (id == idCorrect){
     eChosen.style.color = '#00dec0' // teal
-    result.style.color = '#00dec0' 
+    result.style.color = '#00dec0' // teal
     result.innerText = 'Correct'
+    shotclock.style.display = 'none'
+    xImg.style.display = 'none'
+    checkmark.style.display = 'flex'
   }
   
   // show incorrect styling
   else {
-    eChosen.style.color = '#fdb2b2' // red
     eCorrect.style.color = '#00dec0' // teal
-    result.style.color = '#fdb2b2'
+    eChosen.style.color = 'rgb(253, 150, 150)' // red
+    result.style.color = 'rgb(253, 150, 150)' // red
+    shotclock.style.display = 'none'
+    checkmark.style.display = 'none'
+    xImg.style.display = 'flex'
     
     if (id == 'noAnswer'){
-      result.innerText = 'Time\'s Up!'
+      result.innerText = 'Out of Time'
     }
     else {
       result.innerText = 'Incorrect'
@@ -176,16 +185,25 @@ function showArrows(quiz, i){
 }
 
 function startShotclock(){
+  var shotclock = document.getElementById('shotclock')
+  var checkmark = document.getElementById('checkmark')
+  var xImg = document.getElementById('xImg')
+
+  // show shotclock, hide images
+  checkmark.style.display = 'none'
+  xImg.style.display = 'none'
+  shotclock.style.display = 'block'
+
   document.shotclock = (
     setInterval(function(){
-      var shotclock = document.getElementById('shotclock').innerText * 1
-      shotclock -= 1
+      shotclockNum = shotclock.innerText * 1
+      shotclockNum -= 1
       
-      if (shotclock < 0){
+      if (shotclockNum < 0){
         return outOfTime()
       }
       
-      document.getElementById('shotclock').innerText = shotclock
+      shotclock.innerText = shotclockNum
     }, 1000)
   )
 }

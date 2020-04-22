@@ -26,7 +26,6 @@ body {
   justify-content: space-between;
   align-items: center;
   position: absolute;
-  margin-top: 80px;
 }
 
 .arrow {
@@ -68,6 +67,7 @@ body {
 }
 
 .topThird {
+  height: 100%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -109,14 +109,14 @@ body {
   margin-bottom: 5px;
 }
 
-#score {
-
-}
-
 .scoreLine {
   height: 70px;
   width: 2px;
   background: #3e494c;
+}
+
+.shotclockDiv {
+  align-items: center;
 }
 
 #shotclock {
@@ -124,6 +124,27 @@ body {
   font-size: 100px;
   font-weight: 400;
   font-family: 'Audiowide', cursive;
+}
+
+.resultImgDiv {
+  height: 100%;
+  width: calc(100% - 40px);
+  display: none; 
+  justify-content: center;
+  align-items: center;
+}
+
+.resultImg {
+  height: calc(100% - 40px);
+  width: calc(100% - 40px);
+}
+
+#checkmark {
+  background: radial-gradient(rgba(255, 255, 200, 1) 25%, transparent 70%);
+}
+
+#xImg {
+  background: radial-gradient(rgba(253, 150, 150, 1) 20%, transparent 65%);
 }
 
 .leaderboardDiv {
