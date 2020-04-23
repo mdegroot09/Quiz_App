@@ -51,7 +51,7 @@ function getUserResults(quiz){
 function getFormula(){
   var str = (
     '=IF(' + '\n' +
-      'OR(D2 <> "", E2 <> "", F2 <> "", G2 <> "", H2 <> "", I2 <> "", J2 <> "", K2 <> "", L2 <> "", M2 <> ""),' + '\n' +
+      'OR(B2 <> "", D2 <> "", E2 <> "", F2 <> "", G2 <> "", H2 <> "", I2 <> "", J2 <> "", K2 <> "", L2 <> "", M2 <> ""),' + '\n' +
       'SUM(' + '\n' +
         'IF(AND(D2 <> "", D2 = INDIRECT("Questions!F2")), 1, 0),' + '\n' +
         'IF(AND(E2 <> "", E2 = INDIRECT("Questions!F3")), 1, 0),' + '\n' +
@@ -109,8 +109,7 @@ function getLeaders(){
   var ss = SpreadsheetApp.openByUrl(url).getSheetByName('User Results')
   
   var vals = ss.getRange('A2:C').getValues()
-  var leaders = filterLeaders(vals)
-  leaders = leaders.sort(compare)
+  var leaders = filterSortLeaders(vals)
   var myScore = getMyScore(leaders)
   var median = getMedian(leaders)
   
@@ -121,12 +120,12 @@ function getLeaders(){
   })
 }
 
-function filterLeaders(vals){
+function filterSortLeaders(vals){
   var leaders = vals.filter(function(a){
     return (a[2] || a[2] === 0)
   })
-  
-  return leaders
+
+  return leaders.sort(compare)
 }
 
 function compare(a, b) {
@@ -154,17 +153,22 @@ function getMedian(leaders){
   var email = Session.getActiveUser().getEmail()
   
   // filter for non-user scores
-  var scores = leaders.map(function(a){
+  var scores = []
+  leaders.forEach(function(a){
     if ((a[2] || a[2] == 0) && (a[1] != email)){
-      return a[2]
+      scores.push(a[2])
     }
   })
   
   // get and return median
   var half = Math.floor(scores.length / 2);
-  if (scores.length % 2 == 0){
+  
+  // leaders length is odd num
+  if (scores.length % 2 != 0){
     return scores[half];
   }
+  
+  // leaders length is even num
   else {
     return Math.round((scores[half - 1] + scores[half]) / 2);
   }

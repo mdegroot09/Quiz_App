@@ -259,6 +259,7 @@ function runGetLeaders(){
   google.script.run
   // if successful, display the data 
   .withSuccessHandler(function(res){
+    console.log('leaders data:')
     console.log(res)
     document.leaders = res.leaders
     updateScores(res)
