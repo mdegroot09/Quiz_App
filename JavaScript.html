@@ -111,8 +111,8 @@ function registerChoice(id, idCorrect){
   // show incorrect styling
   else {
     eCorrect.style.color = '#00dec0' // teal
-    eChosen.style.color = 'rgb(253, 150, 150)' // red
-    result.style.color = 'rgb(253, 150, 150)' // red
+    eChosen.style.color = 'rgb(253, 165, 165)' // red
+    result.style.color = 'rgb(253, 165, 165)' // red
     shotclock.style.display = 'none'
     checkmark.style.display = 'none'
     xImg.style.display = 'flex'
@@ -284,6 +284,13 @@ function updateScores(data){
   var scoreTheirs = document.getElementById('scoreTheirs')
   var myScore = data.myScore
   var median = data.median
+  
+  if (!myScore){
+    myScore = 0
+  }
+  if (!median){
+    median = 0
+  }
   
   score.innerText = myScore
   scoreTheirs.innerText = median
