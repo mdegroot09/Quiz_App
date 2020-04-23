@@ -11,7 +11,8 @@ function runGetQuizzes(){
     document.quiz = res
     document.active = 0
     showQuestion(res, 0)
-    updateScores()
+    showScores()
+    runGetLeaders()
   })
   // if error
   .withFailureHandler(function(err){
@@ -254,12 +255,38 @@ function runAddChoice(choice, active){
   .addChoice(data)
 }
 
-function updateScores(){
+function showScores(){
   var scores = document.getElementsByClassName('scores')[0]
   var leaderboard = document.getElementById('leaderboard')
   
   scores.style.display = 'flex'
   leaderboard.style.display = 'block'
+}
+
+function runGetLeaders(){
+  // Get data from spreadsheet 
+  google.script.run
+  // if successful, display the data 
+  .withSuccessHandler(function(res){
+    console.log(res)
+    document.leaders = res.leaders
+    updateScores(res)
+  })
+  // if error
+  .withFailureHandler(function(err){
+    console.log("error occured", err);
+  })
+  .getLeaders()
+}
+
+function updateScores(data){
+  var score = document.getElementById('score')
+  var scoreTheirs = document.getElementById('scoreTheirs')
+  var myScore = data.myScore
+  var median = data.median
+  
+  score.innerText = myScore
+  scoreTheirs.innerText = median
 }
 
 </script>

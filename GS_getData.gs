@@ -48,24 +48,6 @@ function getUserResults(quiz){
   }
 }
 
-function addUser(){
-  var url = 'https://docs.google.com/spreadsheets/d/1IBJcmY6GoveD9xy4DTazgoMI24AxaTXIzwTL4DWkAfM/edit?usp=sharing'
-  var ss = SpreadsheetApp.openByUrl(url).getSheetByName('User Results')
-  
-  // add new row
-  ss.insertRowBefore(ss.getRange('A2').getRow())
-  
-  // get user email and paste on new row
-  var email = Session.getActiveUser().getEmail()
-  var name = getName(email)
-  var formula = getFormula()
-  
-  // paste values
-  ss.getRange('A2').setValue(name)
-  ss.getRange('B2').setValue(email)
-  ss.getRange('C2').setValue(formula)
-}
-
 function getFormula(){
   var str = (
     '=IF(' + '\n' +
@@ -92,15 +74,20 @@ function getName(email){
   // get user name from email
   var fullName = email.split('@')[0]
   
-  var lastName = fullName.split('.')[1].split('')
-  lastName[0] = lastName[0].toUpperCase()
-  lastName = lastName.join('')
-  
+  // add first name
   var firstName = fullName.split('.')[0].split('')
   firstName[0] = firstName[0].toUpperCase()
   firstName = firstName.join('')
   
-  return (firstName + ' ' + lastName)
+  // add last name if found
+  var lastName = ''
+  if (fullName.length > 1){
+    lastName = fullName.split('.')[1].split('')
+    lastName[0] = lastName[0].toUpperCase()
+    lastName = ' ' + lastName.join('')
+  }
+  
+  return (firstName + lastName)
 }
 
 function addResultsToObj(quiz, userResults){
@@ -115,4 +102,70 @@ function addResultsToObj(quiz, userResults){
   })
   
   return quiz
+}
+
+function getLeaders(){
+  var url = 'https://docs.google.com/spreadsheets/d/1IBJcmY6GoveD9xy4DTazgoMI24AxaTXIzwTL4DWkAfM/edit?usp=sharing'
+  var ss = SpreadsheetApp.openByUrl(url).getSheetByName('User Results')
+  
+  var vals = ss.getRange('A2:C').getValues()
+  var leaders = filterLeaders(vals)
+  leaders = leaders.sort(compare)
+  var myScore = getMyScore(leaders)
+  var median = getMedian(leaders)
+  
+  return ({
+    leaders: leaders,
+    myScore: myScore,
+    median: median
+  })
+}
+
+function filterLeaders(vals){
+  var leaders = vals.filter(function(a){
+    return (a[2] || a[2] === 0)
+  })
+  
+  return leaders
+}
+
+function compare(a, b) {
+  if (b[2] > a[2]) return 1;
+  if (a[2] > b[2]) return -1;
+  return 0;
+}
+
+function getMyScore(leaders){
+  var email = Session.getActiveUser().getEmail()
+  
+  // filter for user score
+  var myScore
+  for (var i = 0; i < leaders.length; i++){
+    if (leaders[i][1] == email){
+      myScore = leaders[i][2];
+      break;
+    }
+  }
+  
+  return myScore
+}
+
+function getMedian(leaders){
+  var email = Session.getActiveUser().getEmail()
+  
+  // filter for non-user scores
+  var scores = leaders.map(function(a){
+    if ((a[2] || a[2] == 0) && (a[1] != email)){
+      return a[2]
+    }
+  })
+  
+  // get and return median
+  var half = Math.floor(scores.length / 2);
+  if (scores.length % 2 == 0){
+    return scores[half];
+  }
+  else {
+    return Math.round((scores[half - 1] + scores[half]) / 2);
+  }
 }
