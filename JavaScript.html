@@ -82,6 +82,7 @@ function resetQuestionStyling(question){
     hideArrows()
     document.getElementById('shotclock').innerText = 24
     document.getElementById('result').innerText = ''
+    makePointerCursor()
     return startShotclock()
   }
 }
@@ -140,10 +141,21 @@ function makeGray(id, idCorrect){
   // make other options gray and disable all onclicks
   options.forEach(function(a){
     var e = document.getElementById(a)
+    e.style.cursor = 'text'
     if (id != a && idCorrect != a){
       e.style.color = '#dfdfdf'
     }
     e.onclick = ''
+  })
+}
+
+function makePointerCursor(){
+  var options = ['optionA', 'optionB', 'optionC', 'optionD']
+
+  // make other options gray and disable all onclicks
+  options.forEach(function(a){
+    var e = document.getElementById(a)
+    e.style.cursor = 'pointer'
   })
 }
 
