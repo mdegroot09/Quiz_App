@@ -11,7 +11,6 @@ function runGetQuizzes(){
     document.quiz = res
     document.active = 0
     showQuestion(res, 0)
-    showScores()
     runGetLeaders()
   })
   // if error
@@ -255,14 +254,6 @@ function runAddChoice(choice, active){
   .addChoice(data)
 }
 
-function showScores(){
-  var scores = document.getElementsByClassName('scores')[0]
-  var leaderboard = document.getElementById('leaderboard')
-  
-  scores.style.display = 'flex'
-  leaderboard.style.display = 'block'
-}
-
 function runGetLeaders(){
   // Get data from spreadsheet 
   google.script.run
@@ -271,6 +262,7 @@ function runGetLeaders(){
     console.log(res)
     document.leaders = res.leaders
     updateScores(res)
+    updateLeaderboard(res.leaders)
   })
   // if error
   .withFailureHandler(function(err){
@@ -280,6 +272,7 @@ function runGetLeaders(){
 }
 
 function updateScores(data){
+  var scores = document.getElementsByClassName('scores')[0]
   var score = document.getElementById('score')
   var scoreTheirs = document.getElementById('scoreTheirs')
   var myScore = data.myScore
@@ -294,6 +287,46 @@ function updateScores(data){
   
   score.innerText = myScore
   scoreTheirs.innerText = median
+  scores.style.display = 'flex'
+}
+
+function updateLeaderboard(leadersArr){
+  var leaderboard = document.getElementById('leaderboard')
+  var leaders = []
+  var html = ''
+  
+  leadersArr.forEach(function(a, i){
+    var place
+    if (i == 0){
+      place = 1
+    }
+    else if (a[2] == leaders[i - 1][2]){
+      place = leaders[i - 1].place
+    }
+    else {
+      place = i + 1
+    }
+    
+    leaders.push({
+      name: a[0],
+      email: a[1],
+      score: a[2],
+      place: place
+    })
+    html += createLeaderHTML(leaders[i].place, leaders[i].name, leaders[i].score)
+  })
+  
+  leaderboard.innerHTML = html
+  leaderboard.style.display = 'block'
+  document.leaders = leaders
+}
+
+function createLeaderHTML(place, name, score){
+  return ('<div class="leader">' +
+    '<span class="leaderStat">' + place + '.</span>' +
+    '<span class="leaderName">' + name + '</span>' +
+    '<span class="leaderStat">' + score + '</span>' +
+  '</div>')
 }
 
 </script>
