@@ -16,36 +16,38 @@ body {
   align-items: center;
   justify-content: center;
   font-family: 'Montserrat', sans-serif;
-  position: relative;
+}
+
+.main {
+  width: 100%;
+  display: flex; 
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 .arrows {
-  height: 100%;
-  width: 100%;
+  width: 100px;
   display: flex; 
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  position: absolute;
 }
-
+  
 .arrow {
   height: 100px;
   cursor: pointer;
-  z-index: 1;
   opacity: .75;
 }
 
 .arrow:hover {
   opacity: .9;
-}
+} 
 
 #backArrow {
   transform: rotate(180deg);
 }
 
-.main {
+.marquee {
   width: calc(100% - 100px);
-  height: calc(100% - 100px);
   min-height: 100px;
   min-width: 100px;
   max-width: 800px;
@@ -57,7 +59,7 @@ body {
   justify-content: space-evenly;
 }
 
-.mainTop {
+.marqueeTop {
   height: 150px;
   width: calc(100% - 40px);
   display: flex;
@@ -142,10 +144,10 @@ body {
 
 #checkmark {
   background: radial-gradient(rgba(255, 255, 200, 1) 25%, rgba(255, 255, 200, .5) 50%, rgba(255, 255, 200, 0) 65%);
+  background: radial-gradient(rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, .6) 50%, rgba(255, 255, 255, 0) 70%);
 }
 
 #xImg {
-  background: radial-gradient(rgba(253, 165, 165, 1) 20%, rgba(253, 165, 165, .5) 50%, rgba(253, 165, 165, 0) 65%);
 }
 
 .leaderboardDiv {
@@ -189,7 +191,7 @@ body {
   padding-left: 5px;
 }
 
-.mainBottom {
+.marqueeBottom {
   width: calc(100% - 40px);
   min-height: 225px;
   background: white;

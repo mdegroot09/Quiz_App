@@ -246,6 +246,7 @@ function runAddChoice(choice, active){
   // if successful, display the data 
   .withSuccessHandler(function(res){
     console.log('Spreadsheet updated')
+    runGetLeaders()
   })
   // if error
   .withFailureHandler(function(err){
@@ -259,8 +260,6 @@ function runGetLeaders(){
   google.script.run
   // if successful, display the data 
   .withSuccessHandler(function(res){
-    console.log('leaders data:')
-    console.log(res)
     document.leaders = res.leaders
     updateScores(res)
     updateLeaderboard(res.leaders)

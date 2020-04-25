@@ -8,7 +8,7 @@ function addUser(){
   // get user email and paste on new row
   var email = Session.getActiveUser().getEmail()
   var name = getName(email)
-  var formula = getFormula()
+  var formula = getScoreFormula()
   
   // paste values
   ss.getRange('A2').setValue(name)
