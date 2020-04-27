@@ -80,10 +80,11 @@ function resetQuestionStyling(question){
     optionD.style.color = '#596163'
     
     hideArrows()
-    document.getElementById('shotclock').innerText = 24
+    document.getElementById('shotclock').innerText = ''
     document.getElementById('result').innerText = ''
     makePointerCursor()
-    return startShotclock()
+    return 
+    // startShotclock()
   }
 }
 
@@ -165,16 +166,21 @@ function hideArrows(){
 }
 
 function showArrows(quiz, i){
-  // quit function if active num is outside range
+  // quit function if active num is below first
   if (i < 0 || (!i && i != 0)){
     return (document.active = 0)
   }
+  
+  // quit function if active num is above last
   else if (i >= quiz.length){
     return (document.active = (quiz.length - 1))
   }
+  
+  // if active question is last
   else if (i == (quiz.length - 1)){
     document.getElementById('fwdArrow').style.display = 'none'
     
+    // if active question is last and quiz has more than 1
     if (quiz.length > 1){
       document.getElementById('backArrow').style.display = 'block'
     }
@@ -182,9 +188,12 @@ function showArrows(quiz, i){
       document.getElementById('backArrow').style.display = 'none'
     }
   }
+  
+  // if active question is first 
   else if (i == 0){
     document.getElementById('backArrow').style.display = 'none'
     
+    // if active question is first and quiz has more than 1
     if (quiz.length > 1){
       document.getElementById('fwdArrow').style.display = 'block'
     }
@@ -192,6 +201,8 @@ function showArrows(quiz, i){
       document.getElementById('fwdArrow').style.display = 'none'
     }
   }
+  
+  // if active question is after first and before last
   else {
     document.getElementById('backArrow').style.display = 'block'
     document.getElementById('fwdArrow').style.display = 'block'
@@ -322,11 +333,39 @@ function updateLeaderboard(leadersArr){
 }
 
 function createLeaderHTML(place, name, score){
-  return ('<div class="leader">' +
-    '<span class="leaderStat">' + place + '.</span>' +
-    '<span class="leaderName">' + name + '</span>' +
-    '<span class="leaderStat">' + score + '</span>' +
-  '</div>')
+  return (
+    '<div class="leader">' +
+      '<span class="leaderStat">' + place + '.</span>' +
+      '<span class="leaderName">' + name + '</span>' +
+      '<span class="leaderStat">' + score + '</span>' +
+    '</div>'
+  )
+}
+
+function runGetQuesStartTime(){
+  var startBtn = document.getElementById('startBtn')
+  var quesNum = document.active
+  
+  startBtn.style.display = 'none'
+
+  // Get data from spreadsheet 
+  google.script.run
+  // if successful, display the data 
+  .withSuccessHandler(function(res){
+    console.log('start time: ' + new Date(res))
+    var e = document.getElementById('shotclock')
+    var adminShotclock = res + (24 * 1000)
+    var dif = Math.round((adminShotclock - new Date()) / 1000)
+    if (dif != e.innerText){
+      e.innerText = dif
+    }
+    startShotclock()
+  })
+  // if error
+  .withFailureHandler(function(err){
+    console.log("error occured", err);
+  })
+  .getQuesStartTime(quesNum)
 }
 
 </script>

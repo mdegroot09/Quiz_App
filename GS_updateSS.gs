@@ -46,3 +46,37 @@ function addChoice(data){
   
   return
 }
+
+function getQuesStartTime(quesNum){
+  var url = 'https://docs.google.com/spreadsheets/d/1IBJcmY6GoveD9xy4DTazgoMI24AxaTXIzwTL4DWkAfM/edit?usp=sharing'
+  var ss = SpreadsheetApp.openByUrl(url).getSheetByName('Admin')
+  var isAdmin = checkIsAdmin()
+  var time
+  
+  if (isAdmin){
+    time = updateQuesStartTime()
+  }
+  else {
+    time = ss.getRange('B4').getValue()
+  }
+  
+  return time
+}
+
+function checkIsAdmin(){
+  var url = 'https://docs.google.com/spreadsheets/d/1IBJcmY6GoveD9xy4DTazgoMI24AxaTXIzwTL4DWkAfM/edit?usp=sharing'
+  var ss = SpreadsheetApp.openByUrl(url).getSheetByName('Admin')
+  var adminEmail = ss.getRange('B1').getValue()
+  var userEmail = Session.getActiveUser().getEmail()
+  
+  return (adminEmail == userEmail)
+}
+
+function updateQuesStartTime(){
+  var url = 'https://docs.google.com/spreadsheets/d/1IBJcmY6GoveD9xy4DTazgoMI24AxaTXIzwTL4DWkAfM/edit?usp=sharing'
+  var ss = SpreadsheetApp.openByUrl(url).getSheetByName('Admin')
+  var time = Number(new Date())
+  
+  ss.getRange('B4').setValue(time)
+  return time
+}

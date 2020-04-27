@@ -53,16 +53,16 @@ function getScoreFormula(){
     '=IF(' + '\n' +
       'OR(B2 <> "", D2 <> "", E2 <> "", F2 <> "", G2 <> "", H2 <> "", I2 <> "", J2 <> "", K2 <> "", L2 <> "", M2 <> ""),' + '\n' +
       'SUM(' + '\n' +
-        'IF(AND(D2 <> "", D2 = INDIRECT("Questions!F2"), Admin!$B$2 > 0), 1, 0),' + '\n' +
-        'IF(AND(E2 <> "", E2 = INDIRECT("Questions!F3"), Admin!$B$2 > 1), 1, 0),' + '\n' +
-        'IF(AND(F2 <> "", F2 = INDIRECT("Questions!F4"), Admin!$B$2 > 2), 1, 0),' + '\n' +
-        'IF(AND(G2 <> "", G2 = INDIRECT("Questions!F5"), Admin!$B$2 > 3), 1, 0),' + '\n' +
-        'IF(AND(H2 <> "", H2 = INDIRECT("Questions!F6"), Admin!$B$2 > 4), 1, 0),' + '\n' +
-        'IF(AND(I2 <> "", I2 = INDIRECT("Questions!F7"), Admin!$B$2 > 5), 1, 0),' + '\n' +
-        'IF(AND(J2 <> "", J2 = INDIRECT("Questions!F8"), Admin!$B$2 > 6), 1, 0),' + '\n' +
-        'IF(AND(K2 <> "", K2 = INDIRECT("Questions!F9"), Admin!$B$2 > 7), 1, 0),' + '\n' +
-        'IF(AND(L2 <> "", L2 = INDIRECT("Questions!F10"), Admin!$B$2 > 8), 1, 0),' + '\n' +
-        'IF(AND(M2 <> "", M2 = INDIRECT("Questions!F11"), Admin!$B$2 > 9), 1, 0)' + '\n' +
+        'IF(AND(D2 <> "", D2 = INDIRECT("Questions!F2"), Admin!$A$4 > 0), 1, 0),' + '\n' +
+        'IF(AND(E2 <> "", E2 = INDIRECT("Questions!F3"), Admin!$A$4 > 1), 1, 0),' + '\n' +
+        'IF(AND(F2 <> "", F2 = INDIRECT("Questions!F4"), Admin!$A$4 > 2), 1, 0),' + '\n' +
+        'IF(AND(G2 <> "", G2 = INDIRECT("Questions!F5"), Admin!$A$4 > 3), 1, 0),' + '\n' +
+        'IF(AND(H2 <> "", H2 = INDIRECT("Questions!F6"), Admin!$A$4 > 4), 1, 0),' + '\n' +
+        'IF(AND(I2 <> "", I2 = INDIRECT("Questions!F7"), Admin!$A$4 > 5), 1, 0),' + '\n' +
+        'IF(AND(J2 <> "", J2 = INDIRECT("Questions!F8"), Admin!$A$4 > 6), 1, 0),' + '\n' +
+        'IF(AND(K2 <> "", K2 = INDIRECT("Questions!F9"), Admin!$A$4 > 7), 1, 0),' + '\n' +
+        'IF(AND(L2 <> "", L2 = INDIRECT("Questions!F10"), Admin!$A$4 > 8), 1, 0),' + '\n' +
+        'IF(AND(M2 <> "", M2 = INDIRECT("Questions!F11"), Admin!$A$4 > 9), 1, 0)' + '\n' +
       ')' + '\n' +
     ',"")'
   )
