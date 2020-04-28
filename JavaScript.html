@@ -29,6 +29,7 @@ function showQuestion(quiz, i){
   document.getElementById('questionActive').innerText = i + 1
   document.getElementById('questionTotal').innerText = quiz.length
   document.getElementsByClassName('questionNum')[0].style.display = 'flex'
+  document.getElementsByClassName('questionDiv')[0].style.display = 'none'
 
   var questionObj = quiz[i]
   console.log('showQuestion() questionObj:')
@@ -67,12 +68,6 @@ function resetQuestionStyling(question){
   
   // add click functions, styling if no choice has been made
   else {
-    // update option onclicks
-    optionA.onclick = function(){registerChoice('optionA', idCorrect)}
-    optionB.onclick = function(){registerChoice('optionB', idCorrect)}
-    optionC.onclick = function(){registerChoice('optionC', idCorrect)}
-    optionD.onclick = function(){registerChoice('optionD', idCorrect)}
-    
     // update option styling
     optionA.style.color = '#596163'
     optionB.style.color = '#596163'
@@ -82,13 +77,14 @@ function resetQuestionStyling(question){
     hideArrows()
     document.getElementById('shotclock').innerText = ''
     document.getElementById('result').innerText = ''
-    makePointerCursor()
-    return 
+    // makeCursorPointer()
+    return removeOnClicks()
     // startShotclock()
   }
 }
 
 function registerChoice(id, idCorrect){
+  var questionDiv = document.getElementsByClassName('questionDiv')[0]
   var eChosen = document.getElementById(id)
   var eCorrect = document.getElementById(idCorrect)
   var result = document.getElementById('result')
@@ -97,6 +93,7 @@ function registerChoice(id, idCorrect){
   var xImg = document.getElementById('xImg')
   
   stopShotclock()
+  questionDiv.style.display = 'flex'
   
   // show correct styling
   if (id == idCorrect){
@@ -142,15 +139,44 @@ function makeGray(id, idCorrect){
   // make other options gray and disable all onclicks
   options.forEach(function(a){
     var e = document.getElementById(a)
-    e.style.cursor = 'text'
     if (id != a && idCorrect != a){
       e.style.color = '#dfdfdf'
     }
-    e.onclick = ''
   })
+  
+  removeOnClicks()
 }
 
-function makePointerCursor(){
+function removeOnClicks(){
+  var options = ['optionA', 'optionB', 'optionC', 'optionD']
+  
+  // update option onclicks
+  options.forEach(function(a){
+    var e = document.getElementById(a)
+    e.onclick = ''
+  })
+  
+  makeCursorText()
+}
+
+function createOnClicks(){
+  var options = ['optionA', 'optionB', 'optionC', 'optionD']
+  var idCorrect = document.quiz[document.active].idCorrect
+  var questionDiv = document.getElementsByClassName('questionDiv')[0]
+  
+  // show question
+  questionDiv.style.display = 'flex'
+  
+  // update option onclicks
+  options.forEach(function(a){
+    var e = document.getElementById(a)
+    e.onclick = function(){registerChoice(a, idCorrect)}
+  })
+  
+  makeCursorPointer()
+}
+ 
+function makeCursorPointer(){
   var options = ['optionA', 'optionB', 'optionC', 'optionD']
 
   // make other options gray and disable all onclicks
@@ -160,9 +186,25 @@ function makePointerCursor(){
   })
 }
 
+function makeCursorText(){
+  var options = ['optionA', 'optionB', 'optionC', 'optionD']
+
+  // make other options gray and disable all onclicks
+  options.forEach(function(a){
+    var e = document.getElementById(a)
+    e.style.cursor = 'text'
+  })
+}
+
 function hideArrows(){
   document.getElementById('backArrow').style.display = 'none'
   document.getElementById('fwdArrow').style.display = 'none'
+  
+  // show shotclock and start btn but hide others
+  document.getElementById('shotclock').style.display = 'block'
+  document.getElementById('startBtn').style.display = 'block'
+  document.getElementById('xImg').style.display = 'none'
+  document.getElementById('checkmark').style.display = 'none'
 }
 
 function showArrows(quiz, i){
@@ -344,6 +386,7 @@ function createLeaderHTML(place, name, score){
 
 function runGetQuesStartTime(){
   var startBtn = document.getElementById('startBtn')
+  var shotclock = document.getElementById('shotclock')
   var quesNum = document.active
   
   startBtn.style.display = 'none'
@@ -353,13 +396,19 @@ function runGetQuesStartTime(){
   // if successful, display the data 
   .withSuccessHandler(function(res){
     console.log('start time: ' + new Date(res))
-    var e = document.getElementById('shotclock')
-    var adminShotclock = res + (24 * 1000)
-    var dif = Math.round((adminShotclock - new Date()) / 1000)
-    if (dif != e.innerText){
-      e.innerText = dif
+    var adminShotclock = Number(res) - (24 * 1000)
+    var dif = Math.floor((Number(new Date()) - adminShotclock) / 1000)
+    console.log('seconds lef: ' + dif)
+    if (dif > 24){dif = 24} // reset to 24 if greater than
+    if ((dif < Number(shotclock.innerText) || dif <= 24) && dif >= 0){
+      shotclock.innerText = dif
+      startShotclock()
+      createOnClicks()
     }
-    startShotclock()
+    else {
+      removeOnClicks()
+      registerChoice('noAnswer', document.quiz[quesNum].idCorrect)
+    }
   })
   // if error
   .withFailureHandler(function(err){

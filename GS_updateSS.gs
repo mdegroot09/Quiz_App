@@ -44,7 +44,7 @@ function addChoice(data){
     ss.getRange(row, column).setValue(choice)
   }
   
-  return
+  return updateShotclockStatus(false)
 }
 
 function getQuesStartTime(quesNum){
@@ -53,11 +53,30 @@ function getQuesStartTime(quesNum){
   var isAdmin = checkIsAdmin()
   var time
   
+  // return admin user's start time
   if (isAdmin){
-    time = updateQuesStartTime()
+    time = updateQuesStartTime() 
   }
+  
+  // if user is not admin, return admin's start time
   else {
-    time = ss.getRange('B4').getValue()
+    var adminCompleted = ss.getRange('A4').getValue()
+    var quesIsActive = ss.getRange('C4').getValue() 
+    
+    // return start time if completed count <= active question
+    if (adminCompleted <= quesNum && quesIsActive){
+      time = Number(ss.getRange('B4').getValue())
+    }
+    
+    // return start time if user is ahead of admin
+    if (adminCompleted <= quesNum && !quesIsActive){
+      time = Number(new Date())
+    }
+    
+    // return expired time if admin is ahead of user
+    else {
+      time = Number(new Date()) - (60 * 1000)
+    }
   }
   
   return time
@@ -78,5 +97,13 @@ function updateQuesStartTime(){
   var time = Number(new Date())
   
   ss.getRange('B4').setValue(time)
+  updateShotclockStatus(true)
   return time
+}
+
+function updateShotclockStatus(isActive){
+  var url = 'https://docs.google.com/spreadsheets/d/1IBJcmY6GoveD9xy4DTazgoMI24AxaTXIzwTL4DWkAfM/edit?usp=sharing'
+  var ss = SpreadsheetApp.openByUrl(url).getSheetByName('Admin')
+  
+  ss.getRange('C4').setValue(isActive)
 }
