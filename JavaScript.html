@@ -115,7 +115,7 @@ function registerChoice(id, idCorrect){
     xImg.style.display = 'flex'
     
     if (id == 'noAnswer'){
-      result.innerText = 'Out of Time'
+      result.innerText = 'Time Expired'
     }
     else {
       result.innerText = 'Incorrect'
@@ -396,10 +396,10 @@ function runGetQuesStartTime(){
   // if successful, display the data 
   .withSuccessHandler(function(res){
     console.log('start time: ' + new Date(res))
-    var adminShotclock = Number(res) - (24 * 1000)
-    var dif = Math.floor((Number(new Date()) - adminShotclock) / 1000)
-    console.log('seconds lef: ' + dif)
-    if (dif > 24){dif = 24} // reset to 24 if greater than
+    var adminShotclock = Number(res) + (24 * 1000)
+    var dif = Math.floor((adminShotclock - (Number(new Date()))) / 1000)
+    console.log('*** seconds lef: ' + dif + ' ***')
+    
     if ((dif < Number(shotclock.innerText) || dif <= 24) && dif >= 0){
       shotclock.innerText = dif
       startShotclock()
