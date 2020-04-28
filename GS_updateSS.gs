@@ -53,23 +53,28 @@ function getQuesStartTime(quesNum){
   var isAdmin = checkIsAdmin()
   var time
   
-  // return admin user's start time
+  // if admin, update start time
   if (isAdmin){
     time = updateQuesStartTime() 
   }
   
-  // if user is not admin, return admin's start time
+  // if not admin, return admin's start time if needed
   else {
     var adminCompleted = ss.getRange('A4').getValue()
     var quesIsActive = ss.getRange('C4').getValue() 
     
-    // return start time if completed count <= active question
-    if (adminCompleted <= quesNum && quesIsActive){
+    // return start time if active shotclock
+    if (adminCompleted == quesNum && quesIsActive){
       time = Number(ss.getRange('B4').getValue())
     }
     
+    // return start time if completed count <= active question
+    else if (adminCompleted == quesNum && !quesIsActive){
+      time = Number(new Date())
+    }
+    
     // return start time if user is ahead of admin
-    if (adminCompleted <= quesNum && !quesIsActive){
+    else if (adminCompleted < quesNum){
       time = Number(new Date())
     }
     
