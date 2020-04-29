@@ -138,11 +138,8 @@ function filterSortLeaders(vals){
     else if (adminCompleted >= 3){
       return ((a[2] >= (adminCompleted - 1)) && (a[1] != adminEmail))
     }
-    else if (adminCompleted >= 1){
-      return ((a[2]) && (a[1] != adminEmail))
-    }
     else {
-      return ((a[2] || a[2] === 0) && (a[1] != adminEmail))
+      return (a[2] === adminCompleted && a[1] != adminEmail)
     }
   })
   
