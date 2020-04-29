@@ -130,6 +130,33 @@ body {
 
 #startBtn {
   display: none;
+  width: calc(100% - 40px);
+  max-width: 90px;
+  height: 40px;
+  background: white;
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: #00dec0;
+  color: #596163;
+  font-family: 'Montserrat', sans-serif;
+}
+
+#startBtn:hover {
+  background: #efefef;
+}
+
+#startBtn:active {
+  background: #efefef;
+}
+
+#loadIcon {
+  display: none;
+  height: 40px;
+  opacity: .7;
+  -webkit-animation: rotation 2s infinite linear;
 }
 
 .resultImgDiv {
@@ -170,7 +197,13 @@ body {
   font-weight: 600;
   padding: 0 10px;
   border-bottom: solid 2px #3e494c;
-  margin: 5px 0;
+  margin-top: 5px;
+}
+
+#thru {
+  font-size: 15px;
+  width: 100%;
+  text-align: center;
 }
 
 #leaderboard {
@@ -253,6 +286,15 @@ body {
   font-size: 65px;
   font-weight: 600;
   margin-top: 10px;
+}
+
+@-webkit-keyframes rotation {
+  from {
+	-webkit-transform: rotate(0deg);
+  }
+  to {
+	-webkit-transform: rotate(359deg);
+  }
 }
 
 </style>

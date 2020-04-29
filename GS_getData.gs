@@ -112,19 +112,40 @@ function getLeaders(){
   var leaders = filterSortLeaders(vals)
   var myScore = getMyScore(leaders)
   var median = getMedian(leaders)
+  var adminCompleted = getAdminCompleted()
   
   return ({
     leaders: leaders,
     myScore: myScore,
-    median: median
+    median: median,
+    adminCompleted: adminCompleted
   })
 }
 
 function filterSortLeaders(vals){
+  var url = 'https://docs.google.com/spreadsheets/d/1IBJcmY6GoveD9xy4DTazgoMI24AxaTXIzwTL4DWkAfM/edit?usp=sharing'
+  var ss = SpreadsheetApp.openByUrl(url).getSheetByName('Admin')
+  var adminEmail = ss.getRange('B1').getValue()
+  var adminCompleted = getAdminCompleted()
+  
   var leaders = vals.filter(function(a){
-    return (a[2] || a[2] === 0)
+    if (adminCompleted >= 7){
+      return ((a[2] >= (adminCompleted - 3)) && (a[1] != adminEmail))
+    }
+    else if (adminCompleted >= 5){
+      return ((a[2] >= (adminCompleted - 2)) && (a[1] != adminEmail))
+    }
+    else if (adminCompleted >= 3){
+      return ((a[2] >= (adminCompleted - 1)) && (a[1] != adminEmail))
+    }
+    else if (adminCompleted >= 1){
+      return ((a[2]) && (a[1] != adminEmail))
+    }
+    else {
+      return ((a[2] || a[2] === 0) && (a[1] != adminEmail))
+    }
   })
-
+  
   return leaders.sort(compare)
 }
 
@@ -172,4 +193,11 @@ function getMedian(leaders){
   else {
     return Math.round((scores[half - 1] + scores[half]) / 2);
   }
+}
+
+function getAdminCompleted(){
+  var url = 'https://docs.google.com/spreadsheets/d/1IBJcmY6GoveD9xy4DTazgoMI24AxaTXIzwTL4DWkAfM/edit?usp=sharing'
+  var ss = SpreadsheetApp.openByUrl(url).getSheetByName('Admin')
+  
+  return ss.getRange('A4').getValue()
 }

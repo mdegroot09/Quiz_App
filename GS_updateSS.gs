@@ -60,7 +60,7 @@ function getQuesStartTime(quesNum){
   
   // if not admin, return admin's start time if needed
   else {
-    var adminCompleted = ss.getRange('A4').getValue()
+    var adminCompleted = getAdminCompleted()
     var quesIsActive = ss.getRange('C4').getValue() 
     
     // return start time if active shotclock

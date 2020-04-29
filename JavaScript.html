@@ -115,7 +115,7 @@ function registerChoice(id, idCorrect){
     xImg.style.display = 'flex'
     
     if (id == 'noAnswer'){
-      result.innerText = 'Time Expired'
+      result.innerText = 'Out of Time'
     }
     else {
       result.innerText = 'Incorrect'
@@ -315,7 +315,7 @@ function runGetLeaders(){
   .withSuccessHandler(function(res){
     document.leaders = res.leaders
     updateScores(res)
-    updateLeaderboard(res.leaders)
+    updateLeaderboard(res.leaders, res.adminCompleted)
   })
   // if error
   .withFailureHandler(function(err){
@@ -343,10 +343,10 @@ function updateScores(data){
   scores.style.display = 'flex'
 }
 
-function updateLeaderboard(leadersArr){
+function updateLeaderboard(leadersArr, adminCompleted){
   var leaderboard = document.getElementById('leaderboard')
   var leaders = []
-  var html = ''
+  var html = createThruHTML(adminCompleted)
   
   leadersArr.forEach(function(a, i){
     var place
@@ -375,6 +375,11 @@ function updateLeaderboard(leadersArr){
 }
 
 function createLeaderHTML(place, name, score){
+  var display = 'flex'
+  if (!score){
+    display = 'none'
+  }
+  
   return (
     '<div class="leader">' +
       '<span class="leaderStat">' + place + '.</span>' +
@@ -384,22 +389,42 @@ function createLeaderHTML(place, name, score){
   )
 }
 
+function createThruHTML(adminCompleted){
+  var html = ''
+  
+  if (adminCompleted){
+    html = (
+      '<div id="thru">' +
+        '(Thru ' + adminCompleted + ')' +
+      '</div>'
+    )
+  }
+  
+  html += '<div style="height: 5px"></div>'
+  
+  return html
+}
+
 function runGetQuesStartTime(){
   var startBtn = document.getElementById('startBtn')
   var shotclock = document.getElementById('shotclock')
+  var questionDiv = document.getElementsByClassName('questionDiv')[0]
+  var loadIcon = document.getElementById('loadIcon')
   var quesNum = document.active
   
+  questionDiv.style.display = 'flex'
   startBtn.style.display = 'none'
+  loadIcon.style.display = 'block'
 
   // Get data from spreadsheet 
   google.script.run
   // if successful, display the data 
   .withSuccessHandler(function(res){
     console.log('start time: ' + new Date(res))
-    var adminShotclock = Number(res) + (24 * 1000)
-    var dif = Math.floor((adminShotclock - (Number(new Date()))) / 1000)
-    console.log('*** seconds lef: ' + dif + ' ***')
-    
+    var adminShotclock = Number(res) - (24 * 1000)
+    var dif = Math.round((Number(new Date()) - adminShotclock) / 1000)
+    console.log('seconds lef: ' + dif)
+    loadIcon.style.display = 'none'
     if ((dif < Number(shotclock.innerText) || dif <= 24) && dif >= 0){
       shotclock.innerText = dif
       startShotclock()
