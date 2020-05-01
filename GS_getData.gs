@@ -3,7 +3,7 @@ function getQuizzes(){
   var ss = SpreadsheetApp.openByUrl(url).getSheetByName('Questions')
   
   // get quiz questions, filter out blank lines
-  var quizArr = ss.getRange('A2:F10').getValues()
+  var quizArr = ss.getRange('A2:F').getValues()
   quizArr = quizArr.filter(function(a){
     return a[0]
   })
