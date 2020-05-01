@@ -110,8 +110,8 @@ function getLeaders(){
   
   var vals = ss.getRange('A2:C').getValues()
   var leaders = filterSortLeaders(vals)
-  var myScore = getMyScore(leaders)
-  var median = getMedian(leaders)
+  var myScore = getMyScore(vals)
+  var median = getMedian(vals)
   var adminCompleted = getAdminCompleted()
   
   return ({
@@ -127,23 +127,38 @@ function filterSortLeaders(vals){
   var ss = SpreadsheetApp.openByUrl(url).getSheetByName('Admin')
   var adminEmail = ss.getRange('B1').getValue()
   var adminCompleted = getAdminCompleted()
+  var i = 0
+  var leaders = []
   
-  var leaders = vals.filter(function(a){
-    if (adminCompleted >= 7){
-      return ((a[2] >= (adminCompleted - 3)) && (a[1] != adminEmail))
+  // keep iterating until at least 1 leader is found
+  while (leaders.length < 1){ 
+    leaders = filterLeaders(vals, adminCompleted, adminEmail, i)
+    
+    i += 1
+    if ((i > adminCompleted && leaders.length < 1) || !leaders){
+      return []
     }
-    else if (adminCompleted >= 5){
-      return ((a[2] >= (adminCompleted - 2)) && (a[1] != adminEmail))
-    }
-    else if (adminCompleted >= 3){
-      return ((a[2] >= (adminCompleted - 1)) && (a[1] != adminEmail))
-    }
-    else {
-      return (a[2] === adminCompleted && a[1] != adminEmail)
-    }
-  })
+  }
   
   return leaders.sort(compare)
+}
+
+function filterLeaders(vals, adminCompleted, adminEmail, i){
+  var dif = Math.floor((adminCompleted + 0.25) * 0.39) + i
+  var minimum = adminCompleted - dif
+  if (minimum < 0){
+    return false
+  }
+  
+  var leaders = vals.filter(function(a){
+    return (
+      (a[1] || a[1] === 0) && // either truthy or 0
+      (a[2] >= minimum) && // at least minimum
+      (a[1] != adminEmail) // not the admin
+    )
+  })
+  
+  return leaders
 }
 
 function compare(a, b) {
@@ -152,14 +167,14 @@ function compare(a, b) {
   return 0;
 }
 
-function getMyScore(leaders){
+function getMyScore(vals){
   var email = Session.getActiveUser().getEmail()
   
   // filter for user score
   var myScore
-  for (var i = 0; i < leaders.length; i++){
-    if (leaders[i][1] == email){
-      myScore = leaders[i][2];
+  for (var i = 0; i < vals.length; i++){
+    if (vals[i][1] == email){
+      myScore = vals[i][2];
       break;
     }
   }
@@ -167,13 +182,13 @@ function getMyScore(leaders){
   return myScore
 }
 
-function getMedian(leaders){
+function getMedian(vals){
   var email = Session.getActiveUser().getEmail()
   
   // filter for non-user scores
   var scores = []
-  leaders.forEach(function(a){
-    if ((a[2] || a[2] == 0) && (a[1] != email)){
+  vals.forEach(function(a){
+    if ((a[2] || a[2] == 0) && (a[1] != email) && a[1]){
       scores.push(a[2])
     }
   })
@@ -197,4 +212,16 @@ function getAdminCompleted(){
   var ss = SpreadsheetApp.openByUrl(url).getSheetByName('Admin')
   
   return ss.getRange('A4').getValue()
+}
+
+function getSheetNames(){
+  var url = 'https://docs.google.com/spreadsheets/d/1IBJcmY6GoveD9xy4DTazgoMI24AxaTXIzwTL4DWkAfM/edit?usp=sharing'
+  var ss = SpreadsheetApp.openByUrl(url)
+  
+  var sheets = ss.getSheets()
+  var names = sheets.map(function(a){
+    return a.getSheetName()
+  })
+  
+  return names
 }

@@ -12,6 +12,7 @@ function runGetQuizzes(){
     document.active = 0
     showQuestion(res, 0)
     runGetLeaders()
+    runGetSheetNames()
   })
   // if error
   .withFailureHandler(function(err){
@@ -425,6 +426,7 @@ function runGetQuesStartTime(){
     var dif = Math.round((Number(new Date()) - adminShotclock) / 1000)
     console.log('seconds lef: ' + dif)
     loadIcon.style.display = 'none'
+    if (dif > 24){dif = 24}
     if ((dif < Number(shotclock.innerText) || dif <= 24) && dif >= 0){
       shotclock.innerText = dif
       startShotclock()
@@ -440,6 +442,20 @@ function runGetQuesStartTime(){
     console.log("error occured", err);
   })
   .getQuesStartTime(quesNum)
+}
+
+function runGetSheetNames(){
+  // Get data from spreadsheet 
+  google.script.run
+  // if successful, display the data 
+  .withSuccessHandler(function(res){
+    console.log(res)
+  })
+  // if error
+  .withFailureHandler(function(err){
+    console.log("error occured", err);
+  })
+  .getSheetNames()
 }
 
 </script>
