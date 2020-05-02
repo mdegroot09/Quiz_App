@@ -84,11 +84,14 @@ function getQuesStartTime(quesNum){
     
     // return expired time if admin is ahead of user
     else {
-      time = Number(new Date()) + (60 * 1000)
+      time = Number(new Date()) + (60 * 2000)
     }
   }
   
-  return time
+  return ({
+    time: time,
+    isAdmin: isAdmin
+  })
 }
 
 function checkIsAdmin(){

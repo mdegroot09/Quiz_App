@@ -75,11 +75,9 @@ function resetQuestionStyling(question){
     optionD.style.color = '#596163'
     
     hideArrows()
-    document.getElementById('shotclock').innerText = ''
+    document.getElementsByClassName('shotclock')[0].innerText = ''
     document.getElementById('result').innerText = ''
-    // makeCursorPointer()
     return removeOnClicks()
-    // startShotclock()
   }
 }
 
@@ -88,7 +86,7 @@ function registerChoice(id, idCorrect){
   var eChosen = document.getElementById(id)
   var eCorrect = document.getElementById(idCorrect)
   var result = document.getElementById('result')
-  var shotclock = document.getElementById('shotclock')
+  var shotclock = document.getElementsByClassName('shotclock')[0]
   var checkmark = document.getElementById('checkmark')
   var xImg = document.getElementById('xImg')
   
@@ -201,7 +199,7 @@ function hideArrows(){
   document.getElementById('fwdArrow').style.display = 'none'
   
   // show shotclock and start btn but hide others
-  document.getElementById('shotclock').style.display = 'block'
+  document.getElementsByClassName('shotclock')[0].style.display = 'block'
   document.getElementById('startBtn').style.display = 'block'
   document.getElementById('xImg').style.display = 'none'
   document.getElementById('checkmark').style.display = 'none'
@@ -251,8 +249,8 @@ function showArrows(quiz, i){
   }
 }
 
-function startShotclock(){
-  var shotclock = document.getElementById('shotclock')
+function startShotclock(isAdmin){
+  var shotclock = document.getElementsByClassName('shotclock')[0]
   var checkmark = document.getElementById('checkmark')
   var xImg = document.getElementById('xImg')
 
@@ -266,8 +264,10 @@ function startShotclock(){
       shotclockNum = shotclock.innerText * 1
       shotclockNum -= 1
       
-      if (shotclockNum < 0){
-        return outOfTime()
+      updateShotclockStyling(shotclockNum)
+      
+      if (shotclockNum < 1){
+        return outOfTime(isAdmin)
       }
       
       shotclock.innerText = shotclockNum
@@ -275,17 +275,37 @@ function startShotclock(){
   )
 }
 
+function updateShotclockStyling(shotclockNum){
+  var shotclock = document.getElementsByClassName('shotclock')[0]
+  
+  if (shotclockNum < 6){
+    console.log('*** crunch time ***')
+    shotclock.setAttribute("id", "crunchTime")
+  }
+  else if (document.getElementById('crunchTime')){
+    console.log('*** take your time ***')
+    document.getElementById('crunchTime').removeAttribute("id")
+  }
+}
+
 function stopShotclock(){
   clearInterval(document.shotclock)
 }
 
-function outOfTime(){
-  document.getElementById('shotclock').innerText = 0
+function outOfTime(isAdmin){
+  document.getElementsByClassName('shotclock')[0].innerText = 0
   stopShotclock()
   
-  var quiz = document.quiz
-  var i = document.active
-  registerChoice('noAnswer', quiz[i].idCorrect)
+  if (isAdmin){
+    var quiz = document.quiz
+    var active = document.active
+    runAddChoice(quiz[active].idCorrect, active)
+  }
+  else {
+    var quiz = document.quiz
+    var i = document.active
+    return registerChoice('noAnswer', quiz[i].idCorrect)
+  }
 }
 
 function runAddChoice(choice, active){
@@ -407,7 +427,7 @@ function createThruHTML(adminCompleted){
 
 function runGetQuesStartTime(){
   var startBtn = document.getElementById('startBtn')
-  var shotclock = document.getElementById('shotclock')
+  var shotclock = document.getElementsByClassName('shotclock')[0]
   var questionDiv = document.getElementsByClassName('questionDiv')[0]
   var loadIcon = document.getElementById('loadIcon')
   var quesNum = document.active
@@ -416,19 +436,19 @@ function runGetQuesStartTime(){
   startBtn.style.display = 'none'
   loadIcon.style.display = 'block'
 
-  // Get data from spreadsheet 
+  // Get data from spreadsheet
   google.script.run
   // if successful, display the data 
   .withSuccessHandler(function(res){
-    console.log('start time: ' + new Date(res))
-    var adminShotclock = Number(res) - (24 * 1000)
+    var adminShotclock = Number(res.time) - (30 * 1000)
     var dif = Math.round((Number(new Date()) - adminShotclock) / 1000)
-    console.log('seconds lef: ' + dif)
+    console.log('seconds left: ' + dif)
     loadIcon.style.display = 'none'
-    if (dif > 24){dif = 24}
-    if ((dif < Number(shotclock.innerText) || dif <= 24) && dif >= 0){
+    if (dif > 30){dif = 30}
+    if ((dif < Number(shotclock.innerText) || dif <= 30) && dif >= 0){
+      updateShotclockStyling(dif)
       shotclock.innerText = dif
-      startShotclock()
+      startShotclock(res.isAdmin)
       createOnClicks()
     }
     else {
@@ -444,6 +464,8 @@ function runGetQuesStartTime(){
 }
 
 function runGetSheetNames(){
+  // **** NOT IN USE ****
+
   // Get data from spreadsheet 
   google.script.run
   // if successful, display the data 

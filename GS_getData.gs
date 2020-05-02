@@ -215,6 +215,8 @@ function getAdminCompleted(){
 }
 
 function getSheetNames(){
+  // **** NOT IN USE ****
+  
   var url = 'https://docs.google.com/spreadsheets/d/1IBJcmY6GoveD9xy4DTazgoMI24AxaTXIzwTL4DWkAfM/edit?usp=sharing'
   var ss = SpreadsheetApp.openByUrl(url)
   
