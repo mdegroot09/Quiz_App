@@ -134,15 +134,16 @@ body {
   -moz-animation:    crunchOpacity 1s infinite; /* Fx 5+ */
   -o-animation:      crunchOpacity 1s infinite; /* Opera 12+ */
   animation:         crunchOpacity 1s infinite; /* IE 10+, Fx 29+ */
+  font-size: 95px;
 }
   
 @keyframes crunchOpacity {
-  0% {opacity: 0;}
-  15% {opacity: 0; font-size: 90px;}
+  0% {opacity: 0; transition: 1s ease-in-out;}
+  15% {opacity: 0;}
   35% {opacity: 1;}
-  50% {opacity: 1; font-size: 100px;}
+  50% {opacity: 1; transform: scale(1.052);}
   65% {opacity: 1;}
-  85% {opacity: 0; font-size: 90px;}
+  85% {opacity: 0;}
   100% {opacity: 0;}
 }
 
@@ -164,6 +165,7 @@ body {
   color: #00dec0;
   color: #596163;
   font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
 }
 
 #startBtn:hover {
