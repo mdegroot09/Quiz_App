@@ -278,10 +278,24 @@ function startShotclock(isAdmin){
 function updateShotclockStyling(shotclockNum){
   var shotclock = document.getElementsByClassName('shotclock')[0]
   
-  if (shotclockNum < 6){
+  // if crunch time, add crunchTime id
+  if (shotclockNum < 6 && shotclockNum > 0){
     console.log('*** crunch time ***')
     shotclock.setAttribute("id", "crunchTime")
   }
+  
+  // if time’s up, remove crunchTime and add outOfTime id
+  else if (shotclockNum < 1){
+    setTimeout(function(){
+      if (document.getElementById('crunchTime')){
+        console.log('*** take your time ***')
+        document.getElementById('crunchTime').removeAttribute("id")
+      }
+      shotclock.setAttribute("id", "outOfTime")
+    }, 500)
+  }
+  
+  // if above 6, remove id 
   else if (document.getElementById('crunchTime')){
     console.log('*** take your time ***')
     document.getElementById('crunchTime').removeAttribute("id")
@@ -335,7 +349,7 @@ function runGetLeaders(){
   .withSuccessHandler(function(res){
     document.leaders = res.leaders
     updateScores(res)
-    updateLeaderboard(res.leaders, res.adminCompleted)
+    updateLeaderboard(res.leaders, res.adminCompleted, res.myEmail)
   })
   // if error
   .withFailureHandler(function(err){
@@ -363,7 +377,7 @@ function updateScores(data){
   scores.style.display = 'flex'
 }
 
-function updateLeaderboard(leadersArr, adminCompleted){
+function updateLeaderboard(leadersArr, adminCompleted, myEmail){
   var leaderboard = document.getElementById('leaderboard')
   var leaders = []
   var html = createThruHTML(adminCompleted)
@@ -373,7 +387,7 @@ function updateLeaderboard(leadersArr, adminCompleted){
     if (i == 0){
       place = 1
     }
-    else if (a[2] == leaders[i - 1][2]){
+    else if (a[2] == leaders[i - 1].score){
       place = leaders[i - 1].place
     }
     else {
@@ -386,7 +400,7 @@ function updateLeaderboard(leadersArr, adminCompleted){
       score: a[2],
       place: place
     })
-    html += createLeaderHTML(leaders[i].place, leaders[i].name, leaders[i].score)
+    html += createLeaderHTML(leaders[i].place, leaders[i].name, leaders[i].score, leaders[i].email, myEmail)
   })
   
   leaderboard.innerHTML = html
@@ -394,14 +408,19 @@ function updateLeaderboard(leadersArr, adminCompleted){
   document.leaders = leaders
 }
 
-function createLeaderHTML(place, name, score){
+function createLeaderHTML(place, name, score, email, myEmail){
   var display = 'flex'
-  if (!score){
+  var fontWeight = '400'
+  
+  if ((!score  && score !== 0) || name.includes('test')){
     display = 'none'
+  }
+  if (email == myEmail){
+    fontWeight = '600'
   }
   
   return (
-    '<div class="leader">' +
+    '<div class="leader" style="display: ' + display +'; font-weight: ' + fontWeight + ';">' +
       '<span class="leaderStat">' + place + '.</span>' +
       '<span class="leaderName">' + name + '</span>' +
       '<span class="leaderStat">' + score + '</span>' +

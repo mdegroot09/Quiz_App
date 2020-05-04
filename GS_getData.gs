@@ -113,12 +113,14 @@ function getLeaders(){
   var myScore = getMyScore(vals)
   var median = getMedian(vals)
   var adminCompleted = getAdminCompleted()
+  var myEmail = Session.getActiveUser().getEmail()
   
   return ({
     leaders: leaders,
     myScore: myScore,
     median: median,
-    adminCompleted: adminCompleted
+    adminCompleted: adminCompleted,
+    myEmail: myEmail
   })
 }
 
