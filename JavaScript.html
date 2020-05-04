@@ -288,7 +288,7 @@ function updateShotclockStyling(shotclockNum){
   else if (shotclockNum < 1){
     setTimeout(function(){
       if (document.getElementById('crunchTime')){
-        console.log('*** take your time ***')
+        console.log('*** out of time ***')
         document.getElementById('crunchTime').removeAttribute("id")
       }
       shotclock.setAttribute("id", "outOfTime")
@@ -296,9 +296,18 @@ function updateShotclockStyling(shotclockNum){
   }
   
   // if above 6, remove id 
-  else if (document.getElementById('crunchTime')){
-    console.log('*** take your time ***')
-    document.getElementById('crunchTime').removeAttribute("id")
+  else {
+    // remove crunchTime id
+    if (document.getElementById('crunchTime')){
+      console.log('*** removing crunchTime ***')
+      document.getElementById('crunchTime').removeAttribute("id")
+    }
+    
+    // remove outOfTime id 
+    if (document.getElementById('outOfTime')){
+      console.log('*** removing outOfTime ***')
+      document.getElementById('outOfTime').removeAttribute("id")
+    }
   }
 }
 
